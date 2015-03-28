@@ -1,0 +1,36 @@
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/primary_text_default_material_dark"
+    tools:context=".NavigationDrawerFragment">
+
+<ListView
+    android:id="@+id/navigation_drawer_list"
+
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:choiceMode="singleChoice"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="0dp"
+    android:background="#cccc"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:paddingLeft="15dp"
+            android:id="@+id/button_add_server"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Server"
+            android:drawableLeft="@drawable/ic_plus"
+            android:drawablePadding="25dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            style="@style/Widget.AppCompat.Toolbar.Button.Navigation"/>
+        </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/list_layout"
+    >
+
+    <TextView
+        android:id="@+id/remote_current_dir_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:fontFamily="@string/font_family"
+        android:padding="5dp"/>
+
+    <ListView
+        android:id="@+id/remote_file_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/margin_file_list_top"/>
+
+</LinearLayout>
+
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/action_adds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:fab_addButtonColorNormal="@color/add_button"
+        app:fab_addButtonColorPressed="@color/add_button_pressed"
+        app:fab_addButtonPlusIconColor="@android:color/white"
+        app:fab_labelStyle="@style/menu_labels_style">
+
+        <!--<com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_new_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@android:color/white"
+            app:fab_colorPressed="@android:color/darker_gray"
+            app:fab_title="New File"
+            app:fab_icon="@drawable/ic_add_file"/>-->
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_new_folder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@android:color/white"
+            app:fab_colorPressed="@android:color/darker_gray"
+            app:fab_title="New Folder"
+            app:fab_icon="@drawable/ic_add_folder"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+
+    <RelativeLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cc000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/loading_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            style="?android:attr/progressBarStyleLargeInverse"
+            />
+        <TextView
+            android:id="@+id/loading_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:layout_below="@id/loading_progress_bar"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:text="Loading..."/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

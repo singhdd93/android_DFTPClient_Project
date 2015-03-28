@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_download_curr_dir" android:title="Download to Current Directory" />
+    <item android:id="@+id/action_download_private_dir" android:title="Download to Private Directory"  />
+    <item android:id="@+id/action_delete" android:title="Delete" />
+    <item android:id="@+id/action_rename" android:title="Rename" />
+
+</menu>

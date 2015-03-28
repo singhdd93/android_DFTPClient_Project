@@ -1,0 +1,155 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Name"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/edittext_name_server"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:hint="Name of Server"
+                android:inputType="text">
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Host"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/edittext_host_server"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:hint="Host Name or IP Address"
+                android:inputType="textWebEditText"></EditText>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Username"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/edittext_username_server"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:hint="Username for Login"
+                android:inputType="text"></EditText>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Password"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/edittext_password_server"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:hint="Leave blank for Prompt"
+                android:inputType="textPassword"></EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Port"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/edittext_port_server"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:hint="Port Number"
+                android:text="21"
+                android:inputType="number"></EditText>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

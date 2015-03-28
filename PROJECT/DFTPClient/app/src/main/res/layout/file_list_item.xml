@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:minHeight="?android:listPreferredItemHeight"
+    android:gravity="center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
+    <FrameLayout
+        android:layout_width="40dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/file_list_item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/file_list_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/font_family"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="IMG_0282.jpg"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:paddingLeft="2dp">
+
+            <TextView
+                android:id="@+id/file_list_item_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:text="1 items"/>
+
+            <TextView
+                android:id="@+id/file_list_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/font_family"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:text="16-Jan-2015 4:49:04 pm"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+</LinearLayout>

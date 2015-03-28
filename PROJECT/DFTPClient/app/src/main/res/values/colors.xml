@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="red_dim">#6eff0000</color>
+    <color name="green_dim">#6e008200</color>
+    <color name="add_button">#ff0079bc</color>
+    <color name="add_button_pressed">#ff3379bc</color>
+    <color name="black_semi_transparent">#b2000000</color>
+
+</resources>

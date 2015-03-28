@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">D FTP Client</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="hello_local_fragment">Hello Local fragment</string>
+
+    <string name="font_family">sans-serif</string>
+    <string name="title_activity_server">FTPServer</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_file_select">FileSelectActivity</string>
+</resources>
