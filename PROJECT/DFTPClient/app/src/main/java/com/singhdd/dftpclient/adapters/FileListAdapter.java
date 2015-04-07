@@ -23,6 +23,21 @@ public class FileListAdapter extends BaseAdapter {
     private int layoutResourceId;
     private ArrayList<FileItem> files;
 
+    public static class ViewHolder{
+        public final TextView fNameTextView;
+        public final TextView fDataTextView;
+        public final TextView fDateTextView;
+        public final ImageView fIconImageView;
+
+        public ViewHolder(View view){
+            fNameTextView = (TextView) view.findViewById(R.id.file_list_item_name);
+            fDataTextView = (TextView) view.findViewById(R.id.file_list_item_data);
+            fDateTextView = (TextView) view.findViewById(R.id.file_list_item_date);
+            fIconImageView = (ImageView) view.findViewById(R.id.file_list_item_icon);
+        }
+
+    }
+
 
     /**
      * Constructor
@@ -47,25 +62,25 @@ public class FileListAdapter extends BaseAdapter {
 
         View view = convertView;
         if (view == null) {
-            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(layoutResourceId, null);
+            view = LayoutInflater.from(context).inflate(layoutResourceId, parent, false);
+            ViewHolder viewHolder = new ViewHolder(view);
+            view.setTag(viewHolder);
         }
+
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         final FileItem fItem = files.get(position);
         if(fItem != null) {
-            TextView fNameTextView = (TextView) view.findViewById(R.id.file_list_item_name);
-            TextView fDataTextView = (TextView) view.findViewById(R.id.file_list_item_data);
-            TextView fDateTextView = (TextView) view.findViewById(R.id.file_list_item_date);
-            ImageView fIconImageView = (ImageView) view.findViewById(R.id.file_list_item_icon);
 
-            fNameTextView.setText(fItem.getName());
+
+            viewHolder.fNameTextView.setText(fItem.getName());
             if(fItem.getDate() != null) {
                 Date lastModifiedDate = fItem.getDate();
                 DateFormat formatter = DateFormat.getDateTimeInstance();
-                fDateTextView.setText(formatter.format(lastModifiedDate));
+                viewHolder.fDateTextView.setText(formatter.format(lastModifiedDate));
             }
             else {
-                fDateTextView.setText("");
+                viewHolder.fDateTextView.setText("");
             }
 
             int fileType = fItem.getType();
@@ -74,43 +89,43 @@ public class FileListAdapter extends BaseAdapter {
             if(fileType == Globals.FILE_TYPE_DIRECTORY) {
 
                 if(data <= 1){
-                    fDataTextView.setText(data+" Item");
+                    viewHolder.fDataTextView.setText(data+" Item");
                 }
                 else if(data == Long.MAX_VALUE) {
-                    fDataTextView.setText("Folder");
+                    viewHolder.fDataTextView.setText("Folder");
                 }
                 else {
-                    fDataTextView.setText(data+" Items");
+                    viewHolder.fDataTextView.setText(data+" Items");
                 }
-                fIconImageView.setImageResource(Globals.ICON_DIRECTORY);
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_DIRECTORY);
             }
             else if (fileType == Globals.FILE_TYPE_APPLICATION) {
-                fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
-                fIconImageView.setImageResource(Globals.ICON_APPLICATION);
+                viewHolder.fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_APPLICATION);
             }
             else if (fileType == Globals.FILE_TYPE_AUDIO) {
-                fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
-                fIconImageView.setImageResource(Globals.ICON_AUDIO);
+                viewHolder.fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_AUDIO);
             }
             else if (fileType == Globals.FILE_TYPE_IMAGE) {
-                fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
-                fIconImageView.setImageResource(Globals.ICON_IMAGE);
+                viewHolder.fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_IMAGE);
             }
             else if (fileType == Globals.FILE_TYPE_TEXT) {
-                fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
-                fIconImageView.setImageResource(Globals.ICON_TEXT);
+                viewHolder.fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_TEXT);
             }
             else if (fileType == Globals.FILE_TYPE_VIDEO) {
-                fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
-                fIconImageView.setImageResource(Globals.ICON_VIDEO);
+                viewHolder.fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_VIDEO);
             }
             else if (fileType == Globals.FILE_TYPE_PARENT) {
-                fDataTextView.setText("Parent Directory");
-                fIconImageView.setImageResource(Globals.ICON_PARENT);
+                viewHolder.fDataTextView.setText("Parent Directory");
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_PARENT);
             }
             else {
-                fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
-                fIconImageView.setImageResource(Globals.ICON_OTHERS);
+                viewHolder.fDataTextView.setText(Utilities.getHumanReadableFileSize(data,true));
+                viewHolder.fIconImageView.setImageResource(Globals.ICON_OTHERS);
             }
         }
 

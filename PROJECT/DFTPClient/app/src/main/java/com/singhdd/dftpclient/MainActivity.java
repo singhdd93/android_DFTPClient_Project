@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -163,6 +162,15 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    @Override
+    public void disconnectFTPServer() {
+        if (tab1 != null) {
+
+            tab1.disconnectFTPServer();
+
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -243,11 +251,15 @@ public class MainActivity extends ActionBarActivity
 
 
     public void reloadLocalFiles(){
-        tab2.reloadFiles();
+        if(tab2 != null) {
+            tab2.reloadFiles();
+        }
     }
 
     public void reloadFTPFiles(){
-        tab1.reloadFiles();
+        if(tab1 != null) {
+            tab1.reloadFiles();
+        }
     }
 
 

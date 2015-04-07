@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -25,7 +24,7 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.singhdd.dftpclient.adapters.FileListAdapter;
-import com.singhdd.dftpclient.common.view.CustomProgessDialog;
+import com.singhdd.dftpclient.common.view.ProgressDialogFragment;
 import com.singhdd.dftpclient.resuable.FileItem;
 import com.singhdd.dftpclient.resuable.Globals;
 import com.singhdd.dftpclient.resuable.Utilities;
@@ -53,7 +52,8 @@ public class LocalFragment extends Fragment{
     FloatingActionButton addFile;
     FloatingActionButton addFolder;
 
-    CustomProgessDialog mProgressDialog;
+    private ProgressDialogFragment mProgressDialogFragment;
+
     //int originalOrientation;
 
 
@@ -61,7 +61,7 @@ public class LocalFragment extends Fragment{
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putSerializable(STATE_FILESINDIR, filesInDir);
+        outState.putParcelableArrayList(STATE_FILESINDIR, filesInDir);
         outState.putString(STATE_CURRENTDIR,currentDirPath);
         outState.putInt(STATE_SORTTYPE, sortType);
 
@@ -75,7 +75,7 @@ public class LocalFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
     }
 
     @Override
@@ -89,7 +89,6 @@ public class LocalFragment extends Fragment{
         addFile = (FloatingActionButton) rootView.findViewById(R.id.action_new_file);
         addFolder = (FloatingActionButton) rootView.findViewById(R.id.action_new_folder);
 
-        //originalOrientation = getActivity().getRequestedOrientation();
 
         addFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +204,7 @@ public class LocalFragment extends Fragment{
         else {
             sortType = savedInstanceState.getInt(STATE_SORTTYPE);
             currentDirPath = savedInstanceState.getString(STATE_CURRENTDIR);
-            filesInDir = (ArrayList<FileItem>) savedInstanceState.getSerializable(STATE_FILESINDIR);
+            filesInDir = savedInstanceState.getParcelableArrayList(STATE_FILESINDIR);
 
         }
 
@@ -253,14 +252,12 @@ public class LocalFragment extends Fragment{
                                     }
                                     break;
                                 case R.id.action_upload:
-                                    //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-                                    mProgressDialog = new CustomProgessDialog(getActivity());
-                                    mProgressDialog.setTitle("Download");
-                                    mProgressDialog.setMessage(fileItem.getName() + " - " + Utilities.getHumanReadableFileSize(fileItem.getData(), true));
-                                    mProgressDialog.setIndeterminate(true);
-                                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                                    mProgressDialog.setCancelable(false);
-                                    mProgressDialog.show();
+                                    mProgressDialogFragment = new ProgressDialogFragment.Builder()
+                                            .setTitle("Upload")
+                                            .setMessage(fileItem.getName() + " - " + Utilities.getHumanReadableFileSize(fileItem.getData(), true))
+                                            .build();
+                                    mProgressDialogFragment.show(getActivity().getSupportFragmentManager(),"task_progress");
+                                    mProgressDialogFragment.setIndeterminate(getActivity().getSupportFragmentManager(),true);
 
                                     Intent uploadServiceIntent = new Intent(getActivity(),UploadFTPFileService.class);
                                     uploadServiceIntent.putExtra(Globals.ORIGIN_PATH, fileItem.getPath());
@@ -347,15 +344,15 @@ public class LocalFragment extends Fragment{
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
-            mProgressDialog.setIndeterminate(false);
+            mProgressDialogFragment.setIndeterminate(getActivity().getSupportFragmentManager(), false);
             if(resultCode == Globals.RR_CODE_UPLOAD){
                 int progress = resultData.getInt(Globals.PROGRESS);
                 if(progress >= 0)
                 {
-                    mProgressDialog.setProgress(progress);
+                    mProgressDialogFragment.setProgress(getActivity().getSupportFragmentManager(),progress);
 
                     if(progress == 100){
-                        mProgressDialog.dismiss();
+                        mProgressDialogFragment.dismiss(getActivity().getSupportFragmentManager());
                         Toast.makeText(getActivity(),"Upload Completed",Toast.LENGTH_SHORT).show();
                         MainActivity mainActivity = (MainActivity) getActivity();
                         mainActivity.reloadFTPFiles();
@@ -365,11 +362,11 @@ public class LocalFragment extends Fragment{
                 else if(progress == -10)
                 {
                     Toast.makeText(getActivity(),"File already exists",Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
+                    mProgressDialogFragment.dismiss(getActivity().getSupportFragmentManager());
                 }
                 else {
                     Toast.makeText(getActivity(),"Upload Failed",Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
+                    mProgressDialogFragment.dismiss(getActivity().getSupportFragmentManager());
                 }
             }
         }

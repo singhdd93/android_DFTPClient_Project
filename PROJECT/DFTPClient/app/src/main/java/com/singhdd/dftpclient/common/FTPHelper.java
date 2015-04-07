@@ -26,14 +26,12 @@ public class FTPHelper{
     private static final String TAG = "FTP Helper";
     public static FTPClient mFTPClient = null;
     private Context mContext;
-    private ArrayList<FileItem> files;
-    private ArrayList<FileItem> directories;
+    private ArrayList<FileItem> allFiles;
 
     public FTPHelper(Context ctx) {
 
         this.mContext = ctx;
-        files = new ArrayList<>();
-        directories = new ArrayList<>();
+        allFiles = new ArrayList<>();
     }
 
     public boolean ftpConnect(String host, String username, String password, int port)
@@ -162,28 +160,30 @@ public class FTPHelper{
     }
 
     public ArrayList<FileItem> ftpFileList(int sortType) {
-        directories.clear();
-        files.clear();
+        allFiles.clear();
         FTPFile[] ftpFList = listFTPFiles();
-
-        for(FTPFile f : ftpFList) {
-            if(f.getType() == FTPFile.TYPE_DIRECTORY){
-                directories.add(new FileItem(f.getName(),Long.MAX_VALUE, f.getModifiedDate(), f.getName(), Globals.FILE_TYPE_DIRECTORY));
+        if (ftpFList != null) {
+            for(FTPFile f : ftpFList) {
+                if(f.getType() == FTPFile.TYPE_DIRECTORY){
+                    allFiles.add(new FileItem(f.getName(),Long.MAX_VALUE, f.getModifiedDate(), f.getName(), Globals.FILE_TYPE_DIRECTORY));
+                }
+                else {
+                    allFiles.add(new FileItem(f.getName(), f.getSize(), f.getModifiedDate(), f.getName(), Utilities.getFileType(f.getName())));
+                }
             }
-            else {
-                files.add(new FileItem(f.getName(), f.getSize(), f.getModifiedDate(), f.getName(), Utilities.getFileType(f.getName())));
+            FileSorter fileSorter = new FileSorter(sortType);
+
+            Collections.sort(allFiles, fileSorter);
+
+            if(!getFTPCurrentDirectory().equalsIgnoreCase("/")) {
+                allFiles.add(0, new FileItem("..", 0, null, getParentFTPDirectory(), Globals.FILE_TYPE_PARENT));
             }
+            return allFiles;
         }
-        FileSorter fileSorter = new FileSorter(sortType);
-
-        Collections.sort(directories, fileSorter);
-        Collections.sort(files,fileSorter);
-        directories.addAll(files);
-
-        if(!getFTPCurrentDirectory().equalsIgnoreCase("/")) {
-            directories.add(0, new FileItem("..", 0, null, getParentFTPDirectory(), Globals.FILE_TYPE_PARENT));
+        else
+        {
+            return null;
         }
-        return directories;
     }
 
     private FTPFile[] listFTPFiles() {

@@ -57,7 +57,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
      * A pointer to the current callbacks instance (the Activity).
      */
     private NavigationDrawerCallbacks mCallbacks;
-
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
@@ -148,7 +147,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
 
         mDrawerListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 final Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 PopupMenu serverPopupMenu = new PopupMenu(getActionBar().getThemedContext(),view);
@@ -160,9 +159,13 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
                             int sid = cursor.getInt(cursor.getColumnIndex(FTPServerEntry._ID));
                             db.close();
                             db = dbHelper.getWritableDatabase();
-                            db.delete(FTPServerEntry.TABLE_NAME,FTPServerEntry._ID+ " = ?",new String[]{""+sid});
+                            db.delete(FTPServerEntry.TABLE_NAME, FTPServerEntry._ID + " = ?", new String[]{"" + sid});
                             db.close();
                             db = dbHelper.getReadableDatabase();
+                            if(mDrawerListView.isItemChecked(position))
+                            {
+                                mCallbacks.disconnectFTPServer();
+                            }
                             getActivity().getContentResolver().notifyChange(Uri.parse("content://ftpservers"),null);
                         }
                         return true;
@@ -397,10 +400,12 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager.
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
-    public static interface NavigationDrawerCallbacks {
+    public interface NavigationDrawerCallbacks {
         /**
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(String host, String uName, String password, String port);
+        void disconnectFTPServer();
     }
+
 }

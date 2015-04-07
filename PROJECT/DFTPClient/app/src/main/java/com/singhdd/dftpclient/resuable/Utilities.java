@@ -55,8 +55,7 @@ public class Utilities {
     public static ArrayList<FileItem> fileList(File dirPath, int sortType)
     {
         File[] directories = dirPath.listFiles();
-        ArrayList<FileItem> dirs = new ArrayList<>();
-        ArrayList<FileItem> files = new ArrayList<>();
+        ArrayList<FileItem> allFiles = new ArrayList<>();
         try{
             for(File ff : directories)
             {
@@ -66,16 +65,13 @@ public class Utilities {
                     if(tDir != null) {
                         numOfFiles = tDir.length;
                     }
-                    else {
-                        numOfFiles = 0;
-                    }
 
-                    dirs.add(new FileItem(ff.getName(),numOfFiles,new Date(ff.lastModified()),ff.getAbsolutePath(),Globals.FILE_TYPE_DIRECTORY));
+                    allFiles.add(new FileItem(ff.getName(),numOfFiles,new Date(ff.lastModified()),ff.getAbsolutePath(),Globals.FILE_TYPE_DIRECTORY));
                 }
                 else
                 {
 
-                    files.add(new FileItem(ff.getName(),ff.length(),new Date(ff.lastModified()),ff.getAbsolutePath(),getFileType(ff.getAbsolutePath())));
+                    allFiles.add(new FileItem(ff.getName(),ff.length(),new Date(ff.lastModified()),ff.getAbsolutePath(),getFileType(ff.getAbsolutePath())));
                 }
             }
         }catch(Exception e)
@@ -85,13 +81,11 @@ public class Utilities {
         }
         FileSorter fileSorter = new FileSorter(sortType);
 
-        Collections.sort(dirs,fileSorter);
-        Collections.sort(files,fileSorter);
-        dirs.addAll(files);
+        Collections.sort(allFiles,fileSorter);
         if(!dirPath.getName().equalsIgnoreCase("")) {
-            dirs.add(0, new FileItem("..", 0, null, dirPath.getParent(), Globals.FILE_TYPE_PARENT));
+            allFiles.add(0, new FileItem("..", 0, null, dirPath.getParent(), Globals.FILE_TYPE_PARENT));
         }
-        return dirs;
+        return allFiles;
     }
 
 

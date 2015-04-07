@@ -2,10 +2,8 @@ package com.singhdd.dftpclient;
 
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,17 +28,14 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.singhdd.dftpclient.adapters.FileListAdapter;
 import com.singhdd.dftpclient.common.FTPHelper;
-import com.singhdd.dftpclient.common.view.CustomProgessDialog;
+import com.singhdd.dftpclient.common.view.ProgressDialogFragment;
 import com.singhdd.dftpclient.resuable.FileItem;
 import com.singhdd.dftpclient.resuable.Globals;
 import com.singhdd.dftpclient.resuable.Utilities;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-
-import it.sauronsoftware.ftp4j.FTPFile;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -62,7 +57,10 @@ public class RemoteFragment extends Fragment {
     FloatingActionButton addFile;
     FloatingActionButton addFolder;
 
-    CustomProgessDialog mProgressDialog;
+//    static ProgressDialog mProgressDialog;
+//    boolean mProgressVisible = false;
+
+    private ProgressDialogFragment mProgressDialogFragment;
 
     //int originalOrientation;
 
@@ -144,7 +142,6 @@ public class RemoteFragment extends Fragment {
         addFile = (FloatingActionButton) rootView.findViewById(R.id.action_new_file);
         addFolder = (FloatingActionButton) rootView.findViewById(R.id.action_new_folder);
 
-        //originalOrientation = getActivity().getRequestedOrientation();
 
         addFolder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,14 +209,13 @@ public class RemoteFragment extends Fragment {
 
                             switch (itemId){
                                 case R.id.action_download_curr_dir:
-                                    //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-                                    mProgressDialog = new CustomProgessDialog(getActivity());
-                                    mProgressDialog.setTitle("Download");
-                                    mProgressDialog.setMessage(fItem.getName() + " - " + Utilities.getHumanReadableFileSize(fItem.getData(), true));
-                                    mProgressDialog.setIndeterminate(true);
-                                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                                    mProgressDialog.setCancelable(false);
-                                    mProgressDialog.show();
+                                    //
+                                    mProgressDialogFragment = new ProgressDialogFragment.Builder()
+                                            .setTitle("Download")
+                                            .setMessage(fItem.getName() + " - " + Utilities.getHumanReadableFileSize(fItem.getData(), true))
+                                            .build();
+                                    mProgressDialogFragment.show(getActivity().getSupportFragmentManager(),"task_progress");
+                                    mProgressDialogFragment.setIndeterminate(getActivity().getSupportFragmentManager(),true);
 
                                     Intent downloadServiceIntent = new Intent(getActivity(), DownloadFTPFileService.class);
                                     downloadServiceIntent.putExtra(Globals.ORIGIN_PATH,fItem.getName());
@@ -231,13 +227,13 @@ public class RemoteFragment extends Fragment {
                                 case R.id.action_download_private_dir:
 
                                     //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-                                    mProgressDialog = new CustomProgessDialog(getActivity());
-                                    mProgressDialog.setTitle("Download");
-                                    mProgressDialog.setMessage(fItem.getName() + " - " + Utilities.getHumanReadableFileSize(fItem.getData(), true));
-                                    mProgressDialog.setIndeterminate(true);
-                                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                                    mProgressDialog.setCancelable(false);
-                                    mProgressDialog.show();
+                                    mProgressDialogFragment = new ProgressDialogFragment.Builder()
+                                            .setTitle("Download")
+                                            .setMessage(fItem.getName() + " - " + Utilities.getHumanReadableFileSize(fItem.getData(), true))
+                                            .build();
+                                    mProgressDialogFragment.show(getActivity().getSupportFragmentManager(),"task_progress");
+                                    mProgressDialogFragment.setIndeterminate(getActivity().getSupportFragmentManager(),true);
+
 
                                     File privateRootDir = getActivity().getFilesDir();
                                     File downloadsDir = new File(privateRootDir,"downloads");
@@ -309,6 +305,11 @@ public class RemoteFragment extends Fragment {
         }*/
 
         return rootView;
+    }
+
+    public void disconnectFTPServer()
+    {
+        new FTPDiconnect().execute();
     }
 
 
@@ -675,16 +676,18 @@ public class RemoteFragment extends Fragment {
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
-            mProgressDialog.setIndeterminate(false);
+
+            mProgressDialogFragment.setIndeterminate(getActivity().getSupportFragmentManager(),false);
+
             if(resultCode == Globals.RR_CODE_DOWNLOAD){
                 int progress = resultData.getInt(Globals.PROGRESS);
                 if(progress >= 0)
                 {
-                    mProgressDialog.setProgress(progress);
+                    mProgressDialogFragment.setProgress(getActivity().getSupportFragmentManager(),progress);
 
                     if(progress == 100){
-                        mProgressDialog.dismiss();
-                        Toast.makeText(getActivity(),"Download Completed",Toast.LENGTH_SHORT).show();
+                        mProgressDialogFragment.dismiss(getActivity().getSupportFragmentManager());
+                        Toast.makeText(getActivity(), "Download Completed", Toast.LENGTH_SHORT).show();
                         MainActivity mainActivity = (MainActivity) getActivity();
                         mainActivity.reloadLocalFiles();
                         //getActivity().setRequestedOrientation(originalOrientation);
@@ -693,11 +696,11 @@ public class RemoteFragment extends Fragment {
                 else if(progress == -10)
                 {
                     Toast.makeText(getActivity(),"File already exists",Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
+                    mProgressDialogFragment.dismiss(getActivity().getSupportFragmentManager());
                 }
                 else {
                     Toast.makeText(getActivity(),"Download Failed",Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
+                    mProgressDialogFragment.dismiss(getActivity().getSupportFragmentManager());
                 }
             }
         }

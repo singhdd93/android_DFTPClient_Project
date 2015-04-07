@@ -35,7 +35,16 @@ public class FileSorter implements Comparator<FileItem> {
      */
     @Override
     public int compare(FileItem lhs, FileItem rhs) {
-        if(sortBasis == Globals.SORT_BY_NAME) {
+
+        if(lhs.getType()==Globals.FILE_TYPE_DIRECTORY && !(rhs.getType()==Globals.FILE_TYPE_DIRECTORY))
+        {
+            return -1;
+        }
+        else if(!(lhs.getType()==Globals.FILE_TYPE_DIRECTORY) && rhs.getType()==Globals.FILE_TYPE_DIRECTORY)
+        {
+            return 1;
+        }
+        else if(sortBasis == Globals.SORT_BY_NAME) {
             return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
         }
         else if (sortBasis == Globals.SORT_BY_DATE) {
